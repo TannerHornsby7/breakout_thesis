@@ -1,0 +1,18 @@
+[project]
+name = "breakout_thesis"
+version = "0.0.1"
+authors = [
+  { name="Tanner Hornsby", email="tannerhornsby386@gmail.com" },
+]
+description = "testing a breakout thesis"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/tannerhornsby/breakout_thesis"
+Issues = "https://github.com/tannerhornsby/breakout_thesis/issues"
