@@ -3,8 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import date, timedelta, datetime
-from breakout_thesis.app import MarketData, BreakoutAnalyzer
-import io
+from app import MarketData, BreakoutAnalyzer
 
 def plot_strategy_results(df: pd.DataFrame, ticker: str):
     """ An interactive plot showing price, volume, and signals."""
