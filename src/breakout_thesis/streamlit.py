@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from breakout_thesis.app import MarketData, BreakoutAnalyzer
+import io
 
 def plot_strategy_results(df: pd.DataFrame, ticker: str):
     """ An interactive plot showing price, volume, and signals."""
@@ -103,6 +104,29 @@ def plot_returns_distribution(returns: pd.Series):
     )
 
     return fig
+
+def generate_detailed_report(results: pd.DataFrame) -> pd.DataFrame:
+    """Generate a detailed report of all breakout signals and their outcomes."""
+    # Filter for breakout days
+    breakout_data = results[results['is_breakout']].copy()
+    
+    if len(breakout_data) == 0:
+        return pd.DataFrame()
+        
+    # Create detailed report
+    report = pd.DataFrame({
+        'Breakout Date': breakout_data.index,
+        'Close Price': breakout_data['Close'].round(2),
+        'Volume': breakout_data['Volume'].round(0),
+        'Volume MA': breakout_data['vol_ma'].round(0),
+        'Volume Ratio': (breakout_data['Volume'] / breakout_data['vol_ma']).round(2),
+        'Price Change (%)': (breakout_data['daily_return'] * 100).round(2),
+        'Entry Price': breakout_data['entry_price'].round(2),
+        'Exit Price': breakout_data['exit_price'].round(2),
+        'Strategy Return (%)': (breakout_data['strategy_return'] * 100).round(2),
+    })
+    
+    return report
 
 def create_metrics_cards(summary: dict):
     """Display strategy metrics in a clean format."""
@@ -275,6 +299,41 @@ def main():
         )
     else:
         st.info("No trades were generated with the current parameters.")
+
+    # Report Generation Section
+    st.subheader("Generate Detailed Report")
+    col1, col2 = st.columns([1, 3])
+    
+    with col1:
+        if st.button("Generate Report", type="primary"):
+            report_df = generate_detailed_report(results)
+            
+            if len(report_df) == 0:
+                st.error("No breakout signals found to generate report.")
+            else:
+                # Create CSV
+                csv = report_df.to_csv(index=False)
+                
+                # Create download button
+                st.download_button(
+                    label="Download CSV Report",
+                    data=csv,
+                    file_name=f"breakout_report_{ticker}_{datetime.now().strftime('%Y%m%d')}.csv",
+                    mime="text/csv"
+                )
+                
+                # Display preview
+                with col2:
+                    st.write("Report Preview:")
+                    st.dataframe(
+                        report_df.style.background_gradient(
+                            subset=['Strategy Return (%)'],
+                            cmap='RdYlGn',
+                            vmin=-10,
+                            vmax=10
+                        ),
+                        hide_index=True
+                    )
 
 if __name__ == "__main__":
     main() 
