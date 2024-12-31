@@ -2,7 +2,6 @@ altair==5.5.0
 attrs==24.3.0
 beautifulsoup4==4.12.3
 blinker==1.9.0
--e git+ssh://git@github.com/TannerHornsby7/breakout_thesis.git@3b1735b602869eeaf502299805424b295bb5a03b#egg=breakout_thesis
 cachetools==5.5.0
 certifi==2024.12.14
 charset-normalizer==3.4.1
