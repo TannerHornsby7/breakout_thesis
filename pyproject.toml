@@ -12,7 +12,14 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-
+dependencies = [
+    "matplotlib",
+    "streamlit",
+    "pandas",
+    "yfinance",
+    "plotly",
+    "numpy",
+]
 [project.urls]
 Homepage = "https://github.com/tannerhornsby/breakout_thesis"
 Issues = "https://github.com/tannerhornsby/breakout_thesis/issues"

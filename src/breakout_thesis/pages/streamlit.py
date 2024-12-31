@@ -3,8 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import date, timedelta
-import numpy as np
-from app import MarketData, BreakoutAnalyzer
+from breakout_thesis.app import MarketData, BreakoutAnalyzer
 
 def plot_strategy_results(df: pd.DataFrame, ticker: str):
     """ An interactive plot showing price, volume, and signals."""
@@ -176,7 +175,9 @@ def main():
     with col2:
         end_date = st.date_input(
             "End Date",
-            date.today(),
+            # max day is yesterday
+            date.today() - timedelta(days=1),
+            max_value= date.today() - timedelta(days=1),
             help="Analysis end date"
         )
 
@@ -201,10 +202,11 @@ def main():
     price_threshold = st.sidebar.slider(
         "Price Change Threshold",
         min_value=0.0,
-        max_value=0.10,
-        value=0.02,
-        step=0.005,
-        format="%.1f%%",
+        max_value=10.0,
+        value=2.0,
+        step=0.1,
+        # since we are using percentages, we should multiply by 100 in our formatting
+        format="%.2f%%",
         help="Minimum price increase required for breakout"
     )
 
@@ -221,7 +223,7 @@ def main():
     analyzer = BreakoutAnalyzer(
         volume_ma_period=volume_ma_period,
         volume_threshold=volume_threshold,
-        price_threshold=price_threshold,
+        price_threshold=price_threshold / 100,
         holding_period=holding_period
     )
 

@@ -103,13 +103,13 @@ class BreakoutAnalyzer:
         
         return df
     
-    def get_trade_summary(self, df: pd.DataFrame, ticker: str | None = None) -> Dict:
+    def get_trade_summary(self, df: pd.DataFrame, ticker: str = 'AAPL') -> Dict:
         """
         Generate summary statistics for breakout trades.
         
         Args:
             df (pd.DataFrame): DataFrame with signals and returns
-            ticker (str | None): Ticker symbol for labeling
+            ticker (str): Ticker symbol for labeling
         Returns:
             Dict: Summary statistics
         """
